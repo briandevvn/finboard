@@ -3,184 +3,599 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eagle's views</title>
+    <meta name="description" content="Eagle's Views - Investment Dashboard for Forex, Commodities, Precious Metals & Crypto">
+    <title>Eagle's Views</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --bg-primary: #0f1923;
+            --bg-secondary: #1a2332;
+            --bg-card: #1e2d3d;
+            --border: #2a3a4a;
+            --text-primary: #e1e8ef;
+            --text-secondary: #8899aa;
+            --accent: #2196f3;
+            --accent-hover: #42a5f5;
+            --green: #26a69a;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 10px;
-        }
-
-        .column {
-            flex: 1;
-            padding: 10px;
             box-sizing: border-box;
         }
 
-        iframe {
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 14px;
+            height: 14px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3a4f63;
+            border-radius: 7px;
+            border: 2px solid var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a6a82;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            font-size: 28px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        nav {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            font-size: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+        }
+
+        .card-header {
+            padding: 10px 16px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .badge-live {
+            background: rgba(38, 166, 154, 0.15);
+            color: var(--green);
+        }
+
+        .badge-link {
+            background: rgba(33, 150, 243, 0.15);
+            color: var(--accent);
+        }
+
+        .card-body {
+            height: 600px;
+        }
+
+        .card-body .tradingview-widget-container {
+            height: 100%;
             width: 100%;
-            height: 600px; /* Adjust the height as needed */
-            border: 1px solid #ccc;
+        }
+
+        .card-body .tradingview-widget-container__widget {
+            height: calc(100% - 32px);
+            width: 100%;
+        }
+
+        .card-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .link-group {
+            height: 80px;
+            display: flex;
+            gap: 12px;
+            padding: 12px 16px;
+        }
+
+        .link-group-item {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .link-group-item:hover {
+            border-color: var(--accent);
+            background: rgba(33, 150, 243, 0.05);
+        }
+
+        .link-group-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .link-group-content {
+            flex: 1;
+        }
+
+        .link-group-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .link-group-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .link-group-arrow {
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: transform 0.2s;
+        }
+
+        .link-group-item:hover .link-group-arrow {
+            transform: translateX(4px);
+            color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                width: 100%;
+            }
+
+            .card-body {
+                height: 450px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="row">
-    <div class="column">
-        <iframe src="https://fireant.vn/dashboard" frameborder="0"></iframe>
+<header>
+    <div class="header-inner">
+        <a href="#" class="logo">
+            <span class="logo-icon">&#129413;</span>
+            <div>
+                <div class="logo-text">Eagle's Views</div>
+                <div class="logo-sub">Investment Dashboard</div>
+            </div>
+        </a>
+        <nav>
+            <a href="#forex">Forex</a>
+            <a href="#commodities">Commodities</a>
+            <a href="#gold">Gold</a>
+            <a href="#silver">Silver</a>
+            <a href="#stocks">Stocks</a>
+            <a href="#crypto">Crypto</a>
+        </nav>
     </div>
-    <div class="column">
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container" style="height:100%;width:100%">
-            <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                {
-                "autosize": true,
-                "symbol": "USDVND",
-                "interval": "D",
-                "timezone": "Asia/Ho_Chi_Minh",
-                "theme": "light",
-                "style": "1",
-                "locale": "en",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "calendar": false,
-                "support_host": "https://www.tradingview.com"
-            }
-            </script>
-        </div>
-        <!-- TradingView Widget END -->
-    </div>
-</div>
+</header>
 
+<main>
 
-<div class="row">
-    <div class="column">
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container" style="height:100%;width:100%">
-            <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                {
-                "autosize": true,
-                "symbol": "DXY",
-                "interval": "D",
-                "timezone": "Asia/Ho_Chi_Minh",
-                "theme": "light",
-                "style": "1",
-                "locale": "en",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "calendar": false,
-                "support_host": "https://www.tradingview.com"
-            }
-            </script>
+    <!-- FOREX -->
+    <section class="section" id="forex">
+        <div class="section-header">
+            <span class="section-icon">&#128177;</span>
+            <h2 class="section-title">Forex</h2>
         </div>
-        <!-- TradingView Widget END -->
-    </div>
-    <div class="column">
-        <iframe src="https://tradingeconomics.com/commodity/crude-oil" frameborder="0"></iframe>
-    </div>
-</div>
-    
-<div class="row">
-    <div class="column">
-        <iframe src="https://kgold.co/spdrgoldtrust" frameborder="0"></iframe>
-    </div>
-    <div class="column">
-        <iframe src="https://en.macromicro.me/series/3069/gold-spdr-gold-trust-etf-tonnes" frameborder="0"></iframe>
-    </div>
-</div>
-    
-<div class="row">
-    <div class="column">
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container" style="height:100%;width:100%">
-            <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                {
-                "autosize": true,
-                "symbol": "BTCUSD",
-                "interval": "D",
-                "timezone": "Asia/Ho_Chi_Minh",
-                "theme": "light",
-                "style": "1",
-                "locale": "en",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "calendar": false,
-                "support_host": "https://www.tradingview.com"
-            }
-            </script>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">USD / VND</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                        "autosize": true,
+                        "symbol": "USDVND",
+                        "interval": "D",
+                        "timezone": "Asia/Ho_Chi_Minh",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "backgroundColor": "#1e2d3d",
+                        "gridColor": "#2a3a4a",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "calendar": false,
+                        "support_host": "https://www.tradingview.com"
+                    }
+                    </script>
+                </div>
+            </div>
         </div>
-        <!-- TradingView Widget END -->
-    </div>
-    <div class="column">
-        <iframe src="https://tradingeconomics.com/commodity/crude-oil" frameborder="0"></iframe>
-    </div>
-</div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">US Dollar Index (DXY)</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                        "autosize": true,
+                        "symbol": "DXY",
+                        "interval": "D",
+                        "timezone": "Asia/Ho_Chi_Minh",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "backgroundColor": "#1e2d3d",
+                        "gridColor": "#2a3a4a",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "calendar": false,
+                        "support_host": "https://www.tradingview.com"
+                    }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="row">
-    <div class="column">
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container" style="height:100%;width:100%">
-            <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                {
-                "autosize": true,
-                "symbol": "XAUUSD",
-                "interval": "D",
-                "timezone": "Asia/Ho_Chi_Minh",
-                "theme": "light",
-                "style": "1",
-                "locale": "en",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "calendar": false,
-                "support_host": "https://www.tradingview.com"
-            }
-            </script>
+    <!-- COMMODITIES -->
+    <section class="section" id="commodities">
+        <div class="section-header">
+            <span class="section-icon">&#127758;</span>
+            <h2 class="section-title">Commodities</h2>
         </div>
-        <!-- TradingView Widget END -->
-    </div>
-    <div class="column">
-        <iframe src="https://giavang.org/" frameborder="0"></iframe>
-    </div>
-</div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">Crude Oil (WTI)</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                        "autosize": true,
+                        "symbol": "USOIL",
+                        "interval": "D",
+                        "timezone": "Asia/Ho_Chi_Minh",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "backgroundColor": "#1e2d3d",
+                        "gridColor": "#2a3a4a",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "calendar": false,
+                        "support_host": "https://www.tradingview.com"
+                    }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="row">
-    <div class="column">
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container" style="height:100%;width:100%">
-            <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                {
-                "autosize": true,
-                "symbol": "XAGUSD",
-                "interval": "D",
-                "timezone": "Asia/Ho_Chi_Minh",
-                "theme": "light",
-                "style": "1",
-                "locale": "en",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "calendar": false,
-                "support_host": "https://www.tradingview.com"
-            }
-            </script>
+    <!-- GOLD -->
+    <section class="section" id="gold">
+        <div class="section-header">
+            <span class="section-icon">&#129351;</span>
+            <h2 class="section-title">Gold</h2>
         </div>
-        <!-- TradingView Widget END -->
-    </div>
-    <div class="column">
-        <iframe src="https://phuquy.com.vn/bang-gia/bac" frameborder="0"></iframe>
-    </div>
-</div>
-    
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">XAU / USD</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                        "autosize": true,
+                        "symbol": "XAUUSD",
+                        "interval": "D",
+                        "timezone": "Asia/Ho_Chi_Minh",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "backgroundColor": "#1e2d3d",
+                        "gridColor": "#2a3a4a",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "calendar": false,
+                        "support_host": "https://www.tradingview.com"
+                    }
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">SPDR Gold Trust</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <iframe src="https://kgold.co/spdrgoldtrust" referrerpolicy="no-referrer"></iframe>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">External Resources</span>
+                <span class="card-badge badge-link">Links</span>
+            </div>
+            <div class="link-group">
+                <a href="https://en.macromicro.me/series/3069/gold-spdr-gold-trust-etf-tonnes" target="_blank" rel="noopener noreferrer" class="link-group-item">
+                    <span class="link-group-icon">&#128202;</span>
+                    <div class="link-group-content">
+                        <div class="link-group-title">MacroMicro</div>
+                        <div class="link-group-desc">SPDR Gold Trust ETF holdings in tonnes</div>
+                    </div>
+                    <span class="link-group-arrow">&#8594;</span>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">Vietnam Gold Price</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <iframe src="https://giavang.org/" referrerpolicy="no-referrer"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- SILVER -->
+    <section class="section" id="silver">
+        <div class="section-header">
+            <span class="section-icon">&#129352;</span>
+            <h2 class="section-title">Silver</h2>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">XAG / USD</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                        "autosize": true,
+                        "symbol": "XAGUSD",
+                        "interval": "D",
+                        "timezone": "Asia/Ho_Chi_Minh",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "backgroundColor": "#1e2d3d",
+                        "gridColor": "#2a3a4a",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "calendar": false,
+                        "support_host": "https://www.tradingview.com"
+                    }
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">Vietnam Silver Price</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <iframe src="https://phuquy.com.vn/bang-gia/bac" referrerpolicy="no-referrer"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- STOCK MARKET -->
+    <section class="section" id="stocks">
+        <div class="section-header">
+            <span class="section-icon">&#128293;</span>
+            <h2 class="section-title">Stock Market</h2>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">FireAnt Dashboard</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <iframe src="https://fireant.vn/dashboard" referrerpolicy="no-referrer"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- CRYPTO -->
+    <section class="section" id="crypto">
+        <div class="section-header">
+            <span class="section-icon">&#8383;</span>
+            <h2 class="section-title">Crypto</h2>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-label">BTC / USD</span>
+                <span class="card-badge badge-live">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                        "autosize": true,
+                        "symbol": "BTCUSD",
+                        "interval": "D",
+                        "timezone": "Asia/Ho_Chi_Minh",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "backgroundColor": "#1e2d3d",
+                        "gridColor": "#2a3a4a",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "calendar": false,
+                        "support_host": "https://www.tradingview.com"
+                    }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    Eagle's Views &mdash; Investment Dashboard &bull; Data provided by TradingView
+</footer>
+
 </body>
 </html>
